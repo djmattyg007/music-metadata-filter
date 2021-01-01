@@ -1,0 +1,39 @@
+name: Test
+on:
+  push:
+    branches: [master]
+  pull_request:
+    types: [opened, synchronize]
+jobs:
+  test:
+    name: Run linters and tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Cache pip
+        uses: actions/cache@v2
+        with:
+          # This path is specific to Ubuntu
+          path: ~/.cache/pip
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements-dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            ${{ runner.os }}-
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+      - name: Lint with Black
+        run: black --check --diff --no-color music_metadata_filter tests
+      - name: Lint with flake8
+        run: flake8 music_metadata_filter tests
+      - name: Test with pytest
+        run: pytest
+      - name: Check types with mypy
+        run: mypy music_metadata_filter tests

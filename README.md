@@ -1,4 +1,4 @@
-# music-metadata-filter
+# music-metadata-filter [![Test][workflowbadge]][workflow] [![PYPI][pypibadge]][PyPI]
 
 A module for cleaning up artist, album and song names.
 
@@ -147,6 +147,9 @@ filter = make_spotify_filter().append({
 # Run black formatter
 > black music_metadata_filter tests
 
+# Run flake8 linter
+> flake8 music_metadata_filter tests
+
 # Run mypy type checker
 > mypy music_metadata_filter tests
 
@@ -169,6 +172,12 @@ I can't thank the web-scrobbler team enough for creating such a fantastic
 piece of software, and for collaborating with me in the creation of this
 port to Python.
 
+<!-- Badges -->
+
+[pypibadge]: https://img.shields.io/pypi/v/music-metadata-filter
+[workflowbadge]: https://img.shields.io/github/workflow/status/djmattyg007/music-metadata-filter/Test?label=test
+
 <!-- Related pages -->
 
 [PyPI]: https://pypi.org/project/music-metadata-filter
+[workflow]: https://github.com/djmattyg007/metadata-filter/actions?query=workflow%3ATest
