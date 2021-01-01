@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="music-metadata-filter", # Replace with your own username
+    name="music-metadata-filter",
     version="1.0.0",
     author="Matthew Gamble",
     author_email="git@matthewgamble.net",
@@ -23,5 +23,5 @@ setuptools.setup(
         "Programming Language :: Python :: 3.9",
         "Topic :: Multimedia :: Sound/Audio :: Analysis",
     ],
-    python_requires='>=3.7',
+    python_requires=">=3.7",
 )

@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
       - name: Lint with Black
-        run: black --check --diff --no-color music_metadata_filter tests
+        run: black --check --diff --no-color music_metadata_filter tests setup.py
       - name: Lint with flake8
         run: flake8 music_metadata_filter tests
       - name: Test with pytest

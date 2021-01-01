@@ -145,7 +145,7 @@ filter = make_spotify_filter().append({
 > pytest
 
 # Run black formatter
-> black music_metadata_filter tests
+> black music_metadata_filter tests setup.py
 
 # Run flake8 linter
 > flake8 music_metadata_filter tests
