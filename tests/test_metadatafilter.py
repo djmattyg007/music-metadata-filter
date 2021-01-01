@@ -1,11 +1,11 @@
 import pytest
-from typing import Iterable
 from unittest.mock import Mock
 
-from music_metadata_filter.filter import MetadataFilter, FilterFunctions
+from music_metadata_filter.filter import MetadataFilter
 
 
-dummy_fn = lambda x: x
+def dummy_fn(x):
+    return x
 
 
 def run_filter(filter: MetadataFilter, *fns: Mock):
