@@ -180,4 +180,4 @@ port to Python.
 <!-- Related pages -->
 
 [PyPI]: https://pypi.org/project/music-metadata-filter
-[workflow]: https://github.com/djmattyg007/metadata-filter/actions?query=workflow%3ATest
+[workflow]: https://github.com/djmattyg007/music-metadata-filter/actions?query=workflow%3ATest
