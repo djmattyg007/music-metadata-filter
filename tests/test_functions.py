@@ -1,7 +1,11 @@
 import json
 from pathlib import Path
 import pytest
-from typing import Iterable, TypedDict
+from typing import Iterable
+try:
+    from typing import TypedDict
+except ImportError:
+    from typing_extensions import TypedDict
 
 from music_metadata_filter.functions import FilterFunction
 from music_metadata_filter.functions import (
