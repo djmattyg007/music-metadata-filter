@@ -1,11 +1,12 @@
 import json
 from pathlib import Path
 import pytest
+import sys
 from typing import Iterable
 
-try:
+if sys.version_info >= (3, 8):
     from typing import TypedDict
-except ImportError:
+else:
     from typing_extensions import TypedDict
 
 from music_metadata_filter.functions import FilterFunction
