@@ -26,7 +26,7 @@ from music_metadata_filter.functions import (
 )
 
 
-fixtures_path_base = Path(__file__).parent / "fixtures" / "function"
+fixtures_path_base = Path(__file__).parent / "fixtures" / "functions"
 
 
 class FunctionTestCase(TypedDict):
