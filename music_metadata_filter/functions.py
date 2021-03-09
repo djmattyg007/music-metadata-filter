@@ -9,6 +9,7 @@ from .rules import (
     LIVE_FILTER_RULES,
     NORMALIZE_FEATURE_FILTER_RULES,
     PARODY_FILTER_RULES,
+    REISSUE_FILTER_RULES,
     REMASTERED_FILTER_RULES,
     SUFFIX_FILTER_RULES,
     TRIM_SYMBOLS_FILTER_RULES,
@@ -26,6 +27,7 @@ __all__ = (
     "replace_nbsp",
     "remove_clean_explicit",
     "remove_live",
+    "remove_reissue",
     "remove_remastered",
     "remove_version",
     "remove_parody",
@@ -45,17 +47,17 @@ def album_artist_from_artist(text: str) -> str:
     return text
 
 
-def filter_with_filter_rules(text: str, filterRules: Iterable[FilterRule]) -> str:
-    """Replace text according to given filter rules."""
+def filter_with_filter_rules(text: str, filter_rules: Iterable[FilterRule]) -> str:
+    """Replace text in the given string according to given filter rules."""
 
-    def reducer(text: str, filterRule: FilterRule) -> str:
-        return filterRule.source.sub(
-            filterRule.target,
+    def reducer(text: str, filter_rule: FilterRule) -> str:
+        return filter_rule.source.sub(
+            filter_rule.target,
             text,
-            count=filterRule.count,
+            count=filter_rule.count,
         )
 
-    return reduce(reducer, filterRules, text)
+    return reduce(reducer, filter_rules, text)
 
 
 def fix_track_suffix(text: str) -> str:
@@ -70,28 +72,34 @@ def normalize_feature(text: str) -> str:
     return filter_with_filter_rules(text, NORMALIZE_FEATURE_FILTER_RULES)
 
 
-def remove_zero_width(text: str) -> str:
-    """Remove zero-width characters from given string."""
-
-    return re.sub("[\u200B-\u200D\uFEFF]", "", text)
-
-
-def replace_nbsp(text: str) -> str:
-    """Replace all non-breaking space symbols with a space symbol."""
-
-    return text.replace("\u00a0", "\u0020")
-
-
 def remove_clean_explicit(text: str) -> str:
     """Remove "Explicit" and "Clean"-like strings from the text."""
 
     return filter_with_filter_rules(text, CLEAN_EXPLICIT_FILTER_RULES)
 
 
+def remove_feature(text: str) -> str:
+    """Remove "feat"-like strings from the text."""
+
+    return filter_with_filter_rules(text, FEATURE_FILTER_RULES)
+
+
 def remove_live(text: str) -> str:
     """Remove "Live..."-like strings from the text."""
 
     return filter_with_filter_rules(text, LIVE_FILTER_RULES)
+
+
+def remove_parody(text: str) -> str:
+    """Remove "(Parody of "X" by Y)"-like strings from the text."""
+
+    return filter_with_filter_rules(text, PARODY_FILTER_RULES)
+
+
+def remove_reissue(text: str) -> str:
+    """Remove "Re-issue"-like strings from the text."""
+
+    return filter_with_filter_rules(text, REISSUE_FILTER_RULES)
 
 
 def remove_remastered(text: str) -> str:
@@ -106,16 +114,16 @@ def remove_version(text: str) -> str:
     return filter_with_filter_rules(text, VERSION_FILTER_RULES)
 
 
-def remove_parody(text: str) -> str:
-    """Remove "(Parody of "X" by Y)"-like strings from the text."""
+def remove_zero_width(text: str) -> str:
+    """Remove zero-width characters from given string."""
 
-    return filter_with_filter_rules(text, PARODY_FILTER_RULES)
+    return re.sub("[\u200B-\u200D\uFEFF]", "", text)
 
 
-def remove_feature(text: str) -> str:
-    """Remove "feat"-like strings from the text."""
+def replace_nbsp(text: str) -> str:
+    """Replace all non-breaking space symbols with a space symbol."""
 
-    return filter_with_filter_rules(text, FEATURE_FILTER_RULES)
+    return text.replace("\u00a0", "\u0020")
 
 
 def youtube(text: str) -> str:

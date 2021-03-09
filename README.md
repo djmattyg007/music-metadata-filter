@@ -45,14 +45,14 @@ print(functions.youtube("Car Bomb - Scattered Sprites (Official Music Video)"))
 
 See [functions.py](music_metadata_filter/functions.py) for more details.
 
-### Multiple filters
+### Combine filter functions
 
-You can also use multiple filters on a string at once by creating a
+You can also use multiple filter functions on a string at once by creating a
 `MetadataFilter` object which combines multiple functions from above,
 or by using one of the predefined [filter objects](#predefined-filters).
 
-First, create a filter set. This is a set of rules for artists, albums, tracks,
-and albumArtists.
+First, create a filter set. This is a set of filter functions for different
+fields.
 
 ```python
 import music_metadata_filter.functions as functions

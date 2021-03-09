@@ -23,6 +23,11 @@ def test_canfilter():
     assert not filter.can_filter_field("bar")
 
 
+def test_empty_getfields():
+    filter = MetadataFilter({})
+    assert tuple(sorted(filter.get_fields())) == tuple()
+
+
 def test_getfields():
     filter = MetadataFilter({"foo": dummy_fn, "bar": dummy_fn})
     assert tuple(sorted(filter.get_fields())) == ("bar", "foo")

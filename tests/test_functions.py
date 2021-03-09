@@ -18,6 +18,7 @@ from music_metadata_filter.functions import (
     remove_feature,
     remove_live,
     remove_parody,
+    remove_reissue,
     remove_remastered,
     remove_version,
     remove_zero_width,
@@ -79,6 +80,11 @@ def test_remove_live(test_case: FunctionTestCase):
 @pytest.mark.parametrize("test_case", load_fixtures("remove-parody"))
 def test_remove_parody(test_case: FunctionTestCase):
     run_function_test(remove_parody, test_case)
+
+
+@pytest.mark.parametrize("test_case", load_fixtures("remove-reissue"))
+def test_remove_reissue(test_case: FunctionTestCase):
+    run_function_test(remove_reissue, test_case)
 
 
 @pytest.mark.parametrize("test_case", load_fixtures("remove-remastered"))

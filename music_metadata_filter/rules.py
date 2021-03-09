@@ -15,156 +15,135 @@ class FilterRule(object):
     count: int = 0
 
 
-YOUTUBE_TRACK_FILTER_RULES = (
-    # Trim whitespaces
+CLEAN_EXPLICIT_FILTER_RULES = (
+    # (Explicit) or [Explicit]
     FilterRule(
-        source=re.compile(r"""^\s+|\s+$"""),
-    ),
-    # **NEW**
-    FilterRule(
-        source=re.compile(r"""\*+\s?\S+\s?\*+$"""),
+        source=re.compile(r"""\s[([]Explicit[)\]]""", flags=re.IGNORECASE),
         count=1,
     ),
-    # [whatever]
+    # (Clean) or [Clean]
     FilterRule(
-        source=re.compile(r"""\[[^\]]+\]"""),
+        source=re.compile(r"""\s[([]Clean[)\]]""", flags=re.IGNORECASE),
         count=1,
     ),
-    # (whatever version)
+)
+
+FEATURE_FILTER_RULES = (
+    # [Feat. Artist] or (Feat. Artist)
     FilterRule(
-        source=re.compile(r"""\([^)]*version\)$""", flags=re.IGNORECASE),
+        source=re.compile(r"""\s[([]feat. .+[)\]]""", flags=re.IGNORECASE),
         count=1,
     ),
-    # video extensions
+)
+
+LIVE_FILTER_RULES = (
+    # Track - Live
+    # Track - Live at
     FilterRule(
-        source=re.compile(r"""\.(avi|wmv|mpg|mpeg|flv)$""", flags=re.IGNORECASE),
+        source=re.compile(r"""\s-\sLive(\s.+)?$"""),
         count=1,
     ),
-    # (LYRICs VIDEO)
+    # Track (Live)
     FilterRule(
-        source=re.compile(r"""\(.*lyrics?\s*(video)?\)""", flags=re.IGNORECASE),
+        source=re.compile(r"""\s[([]Live[)\]]$"""),
         count=1,
     ),
-    # (Official Track Stream)
+)
+
+NORMALIZE_FEATURE_FILTER_RULES = (
+    # [Feat. Artist] or (Feat. Artist) -> Feat. Artist
     FilterRule(
-        source=re.compile(r"""\((of+icial\s*)?(track\s*)?stream\)""", flags=re.IGNORECASE),
+        source=re.compile(r"""\s[([](feat. .+)[)\]]""", flags=re.IGNORECASE),
+        target=r""" \1""",
         count=1,
     ),
-    # (official)? (music)? video
+)
+
+PARODY_FILTER_RULES = (
+    # Party In the CIA (Parody of "Party In The U.S.A." by Miley Cyrus)
     FilterRule(
-        source=re.compile(r"""\((of+icial\s*)?(music\s*)?video\)""", flags=re.IGNORECASE),
+        source=re.compile(r"""\s\(Parody of ".*" by .*\)$"""),
         count=1,
     ),
-    # (official)? (music)? audio
+    # White & Nerdy (Parody of "Ridin'" by Chamillionaire feat. Krayzie Bone)
     FilterRule(
-        source=re.compile(r"""\((of+icial\s*)?(music\s*)?audio\)""", flags=re.IGNORECASE),
+        source=re.compile(r"""\s\(Parody of ".*" by .* feat\. .*\)$"""),
         count=1,
     ),
-    # (ALBUM TRACK)
+    # The Saga Begins (Lyrical Adaption of "American Pie")
     FilterRule(
-        source=re.compile(r"""(ALBUM TRACK\s*)?(album track\s*)""", flags=re.IGNORECASE),
+        source=re.compile(r"""\s\(Lyrical Adaption of ".*"\)$"""),
         count=1,
     ),
-    # (Cover Art)
+)
+
+REISSUE_FILTER_RULES = (
+    # Album Title Re-issue
     FilterRule(
-        source=re.compile(r"""(COVER ART\s*)?(Cover Art\s*)""", flags=re.IGNORECASE),
+        source=re.compile(r"""\sRe-?issue$""", flags=re.IGNORECASE),
         count=1,
     ),
-    # (official)
+    # Album Title [Whatever Re-issue Whatever]
     FilterRule(
-        source=re.compile(r"""\(\s*of+icial\s*\)""", flags=re.IGNORECASE),
+        source=re.compile(r"""\s\[.*?Re-?issue.*?\]""", flags=re.IGNORECASE),
         count=1,
     ),
-    # (1999)
+    # Album Title (Whatever Re-issue Whatever)
     FilterRule(
-        source=re.compile(r"""\(\s*[0-9]{4}\s*\)""", flags=re.IGNORECASE),
+        source=re.compile(r"""\s\(.*?Re-?issue.*?\)""", flags=re.IGNORECASE),
         count=1,
     ),
-    # (HD) / (HQ)
+)
+
+REMASTERED_FILTER_RULES = (
+    # Ticket To Ride - Live / Remastered
     FilterRule(
-        source=re.compile(r"""\(\s*(HD|HQ)\s*\)$"""),
+        source=re.compile(r"""Live\s\/\sRemastered"""),
+        target=r"""Live""",
         count=1,
     ),
-    # HD / HQ
+    # Mothership (Remastered)
+    # Let It Be (Remastered 2009)
+    # How The West Was Won [Remastered]
+    # Ride the Lightning (Deluxe Remaster)
+    # ...And Justice For All (Remastered Deluxe Box Set)
     FilterRule(
-        source=re.compile(r"""(HD|HQ)\s?$"""),
+        source=re.compile(r"""\s[([].*Re-?[Mm]aster(ed)?.*[)\]]$"""),
         count=1,
     ),
-    # video clip officiel or video clip official
+    # Outside The Wall - 2011 - Remaster
+    # China Grove - 2006 Remaster
+    # Easy Living - 2003 Remastered
+    # Learning To Fly - 2001 Digital Remaster
+    # Red Right Hand - 2011 Remastered Version
     FilterRule(
-        source=re.compile(r"""(vid[\u00E9e]o)?\s?clip\sof+ici[ae]l""", flags=re.IGNORECASE),
+        source=re.compile(r"""\s-\s\d{4}(\s-)?\s.*Re-?[Mm]aster(ed)?.*$"""),
         count=1,
     ),
-    # offizielles
+    # Here Comes The Sun - Remastered
+    # 1979 - Remastered 2012
+    # 1979 - Remastered Version
     FilterRule(
-        source=re.compile(r"""of+iziel+es\s*video""", flags=re.IGNORECASE),
+        source=re.compile(r"""\s-\sRe-?[Mm]aster(ed)?.*$"""),
         count=1,
     ),
-    # video clip
+    # Wish You Were Here [Remastered] (Remastered Version)
     FilterRule(
-        source=re.compile(r"""vid[\u00E9e]o\s?clip""", flags=re.IGNORECASE),
+        source=re.compile(r"""\s\[Remastered\]\s\(Remastered\sVersion\)$"""),
         count=1,
     ),
-    # clip
+)
+
+SUFFIX_FILTER_RULES = (
+    # "- X Remix" -> "(X Remix)" and similar
     FilterRule(
-        source=re.compile(r"""\sclip""", flags=re.IGNORECASE),
+        source=re.compile(r"""-\s(.+?)\s((Re)?mix|edit|dub|mix|vip|version)$""", flags=re.IGNORECASE),
+        target=r"""(\1 \2)""",
         count=1,
     ),
-    # Full Album
     FilterRule(
-        source=re.compile(r"""full\s*album""", flags=re.IGNORECASE),
-        count=1,
-    ),
-    # (live)
-    FilterRule(
-        source=re.compile(r"""\(live.*?\)$""", flags=re.IGNORECASE),
-        count=1,
-    ),
-    # | something
-    FilterRule(
-        source=re.compile(r"""\|.*$""", flags=re.IGNORECASE),
-        count=1,
-    ),
-    # Artist - The new "Track title" featuring someone
-    FilterRule(
-        source=re.compile(r"""^(|.*\s)"(.{5,})"(\s.*|)$"""),
-        target=r"""\2""",
-        count=1,
-    ),
-    # 'Track title'
-    FilterRule(
-        source=re.compile(r"""^(|.*\s)'(.{5,})'(\s.*|)$"""),
-        target=r"""\2""",
-        count=1,
-    ),
-    # (*01/01/1999*)
-    FilterRule(
-        source=re.compile(r"""\(.*[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{2,4}.*\)""", flags=re.IGNORECASE),
-        count=1,
-    ),
-    # Sub Español
-    FilterRule(
-        source=re.compile(r"""sub\s*español""", flags=re.IGNORECASE),
-        count=1,
-    ),
-    # (Letra/Lyrics)
-    FilterRule(
-        source=re.compile(r"""\s\(Letra\/Lyrics\)""", flags=re.IGNORECASE),
-        count=1,
-    ),
-    # (Letra)
-    FilterRule(
-        source=re.compile(r"""\s\(Letra\)""", flags=re.IGNORECASE),
-        count=1,
-    ),
-    # (En vivo)
-    FilterRule(
-        source=re.compile(r"""\s\(En\svivo\)""", flags=re.IGNORECASE),
-        count=1,
-    ),
-    # Sub Español
-    FilterRule(
-        source=re.compile(r"""sub\s*español""", flags=re.IGNORECASE),
+        source=re.compile(r"""-\s(Remix|VIP|Instrumental)$""", flags=re.IGNORECASE),
+        target=r"""(\1)""",
         count=1,
     ),
 )
@@ -193,200 +172,226 @@ TRIM_SYMBOLS_FILTER_RULES = (
     ),
 )
 
-REMASTERED_FILTER_RULES = (
-    # Here Comes The Sun - Remastered
-    FilterRule(
-        source=re.compile(r"""-\sRemastered$"""),
-        count=1,
-    ),
-    # Hey Jude - Remastered 2015
-    FilterRule(
-        source=re.compile(r"""-\sRemastered\s\d+$"""),
-        count=1,
-    ),
-    # Let It Be (Remastered 2009)
-    # Red Rain (Remaster 2012)
-    FilterRule(
-        source=re.compile(r"""\(Remaster(ed)?\s\d+\)$"""),
-        count=1,
-    ),
-    # Pigs On The Wing (Part One) [2011 - Remaster]
-    FilterRule(
-        source=re.compile(r"""\[\d+\s-\sRemaster\]$"""),
-        count=1,
-    ),
-    # Comfortably Numb (2011 - Remaster)
-    # Dancing Days (2012 Remaster)
-    FilterRule(
-        source=re.compile(r"""\(\d+(\s-)?\sRemaster\)$"""),
-        count=1,
-    ),
-    # Outside The Wall - 2011 - Remaster
-    # China Grove - 2006 Remaster
-    FilterRule(
-        source=re.compile(r"""-\s\d+(\s-)?\sRemaster$"""),
-        count=1,
-    ),
-    # Learning To Fly - 2001 Digital Remaster
-    FilterRule(
-        source=re.compile(r"""-\s\d+\s.+?\sRemaster$"""),
-        count=1,
-    ),
-    # Your Possible Pasts - 2011 Remastered Version
-    FilterRule(
-        source=re.compile(r"""-\s\d+\sRemastered Version$"""),
-        count=1,
-    ),
-    # Roll Over Beethoven (Live / Remastered)
-    FilterRule(
-        source=re.compile(r"""\(Live\s\/\sRemastered\)$""", flags=re.IGNORECASE),
-        count=1,
-    ),
-    # Ticket To Ride - Live / Remastered
-    FilterRule(
-        source=re.compile(r"""-\sLive\s\/\sRemastered$"""),
-        count=1,
-    ),
-    # Mothership (Remastered)
-    # How The West Was Won [Remastered]
-    FilterRule(
-        source=re.compile(r"""[([]Remastered[)\]]$"""),
-        count=1,
-    ),
-    # A Well Respected Man (2014 Remastered Version)
-    # A Well Respected Man [2014 Remastered Version]
-    FilterRule(
-        source=re.compile(r"""[([]\d{4} Re[Mm]astered Version[)\]]$"""),
-        count=1,
-    ),
-    # She Was Hot (2009 Re-Mastered Digital Version)
-    # She Was Hot (2009 Remastered Digital Version)
-    FilterRule(
-        source=re.compile(r"""[([]\d{4} Re-?[Mm]astered Digital Version[)\]]$"""),
-        count=1,
-    ),
-)
-
-LIVE_FILTER_RULES = (
-    # Track - Live
-    FilterRule(
-        source=re.compile(r"""-\sLive?$"""),
-        count=1,
-    ),
-    # Track - Live at
-    FilterRule(
-        source=re.compile(r"""-\sLive\s.+?$"""),
-        count=1,
-    ),
-)
-
-CLEAN_EXPLICIT_FILTER_RULES = (
-    # (Explicit) or [Explicit]
-    FilterRule(
-        source=re.compile(r"""\s[([]Explicit[)\]]""", flags=re.IGNORECASE),
-        count=1,
-    ),
-    # (Clean) or [Clean]
-    FilterRule(
-        source=re.compile(r"""\s[([]Clean[)\]]""", flags=re.IGNORECASE),
-        count=1,
-    ),
-)
-
-FEATURE_FILTER_RULES = (
-    # [Feat. Artist] or (Feat. Artist)
-    FilterRule(
-        source=re.compile(r"""\s[([]feat. .+[)\]]""", flags=re.IGNORECASE),
-        count=1,
-    ),
-)
-
-NORMALIZE_FEATURE_FILTER_RULES = (
-    # [Feat. Artist] or (Feat. Artist) -> Feat. Artist
-    FilterRule(
-        source=re.compile(r"""\s[([](feat. .+)[)\]]""", flags=re.IGNORECASE),
-        target=r""" \1""",
-        count=1,
-    ),
-)
-
 VERSION_FILTER_RULES = (
     # Love Will Come To You (Album Version)
     FilterRule(
-        source=re.compile(r"""[([]Album Version[)\]]$"""),
+        source=re.compile(r"""\s[([]Album Version[)\]]$"""),
         count=1,
     ),
     # I Melt With You (Rerecorded)
     # When I Need You [Re-Recorded]
     FilterRule(
-        source=re.compile(r"""[([]Re-?recorded[)\]]$"""),
+        source=re.compile(r"""\s[([]Re-?recorded[)\]]$"""),
         count=1,
     ),
     # Your Cheatin' Heart (Single Version)
     FilterRule(
-        source=re.compile(r"""[([]Single Version[)\]]$"""),
+        source=re.compile(r"""\s[([]Single Version[)\]]$"""),
         count=1,
     ),
     # All Over Now (Edit)
     FilterRule(
-        source=re.compile(r"""[([]Edit[)\]]$"""),
+        source=re.compile(r"""\s[([]Edit[)\]]$"""),
         count=1,
     ),
     # (I Can't Get No) Satisfaction - Mono Version
     FilterRule(
-        source=re.compile(r"""-\sMono Version$"""),
+        source=re.compile(r"""\s-\sMono Version$"""),
         count=1,
     ),
     # Ruby Tuesday - Stereo Version
     FilterRule(
-        source=re.compile(r"""-\sStereo Version$"""),
+        source=re.compile(r"""\s-\sStereo Version$"""),
         count=1,
     ),
     # Pure McCartney (Deluxe Edition)
     FilterRule(
-        source=re.compile(r"""\(Deluxe Edition\)$"""),
+        source=re.compile(r"""\s\(Deluxe Edition\)$"""),
+        count=1,
+    ),
+    # Ace of Spades (Expanded Edition)
+    # Overkill (Expanded Bonus Track Edition)
+    # On Parole (Expanded and Remastered)
+    FilterRule(
+        source=re.compile(r"""\s[([]Expanded.*[)\]]$"""),
+        count=1,
+    ),
+    # Sound of White Noise - Expanded Edition
+    FilterRule(
+        source=re.compile(r"""\s-\sExpanded Edition$"""),
         count=1,
     ),
     # 6 Foot 7 Foot (Explicit Version)
     FilterRule(
-        source=re.compile(r"""[([]Explicit Version[)\]]""", flags=re.IGNORECASE),
+        source=re.compile(r"""\s[([]Explicit Version[)\]]""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # No Remorse (Bonus Track Edition)
+    FilterRule(
+        source=re.compile(r"""\s[([]Bonus Track Edition[)\]]""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # Peace Sells...But Who's Buying (25th Anniversary)
+    # Persistence of Time (30th Anniversary Remaster)
+    FilterRule(
+        source=re.compile(r"""\s[([]\d+th\sAnniversary.*[)\]]""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # 6 Foot 7 Foot - Original
+    FilterRule(
+        source=re.compile(r"""\s-\sOriginal$""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # California Love - Original Version
+    # Personal Jesus - Original Single Version
+    # Prince of the Moment - Original 7" Version
+    # YMCA - Original Version 1978
+    FilterRule(
+        source=re.compile(r"""\s-\sOriginal.*Version(\s\d{4})?$""", flags=re.IGNORECASE),
         count=1,
     ),
 )
 
-SUFFIX_FILTER_RULES = (
-    # "- X Remix" -> "(X Remix)" and similar
+YOUTUBE_TRACK_FILTER_RULES = (
+    # Trim whitespaces
     FilterRule(
-        source=re.compile(r"""-\s(.+?)\s((Re)?mix|edit|dub|mix|vip|version)$""", flags=re.IGNORECASE),
-        target=r"""(\1 \2)""",
+        source=re.compile(r"""^\s+|\s+$"""),
+    ),
+    # **NEW**
+    FilterRule(
+        source=re.compile(r"""\*+\s?\S+\s?\*+$"""),
         count=1,
     ),
+    # [Whatever]
     FilterRule(
-        source=re.compile(r"""-\s(Remix|VIP)$""", flags=re.IGNORECASE),
-        target=r"""(\1)""",
+        source=re.compile(r"""\[[^\]]+\]"""),
         count=1,
     ),
-    # Remove "- Original" suffix
+    # (Whatever Version)
     FilterRule(
-        source=re.compile(r"""-\sOriginal$""", flags=re.IGNORECASE),
+        source=re.compile(r"""\([^)]*version\)$""", flags=re.IGNORECASE),
         count=1,
     ),
-)
-
-PARODY_FILTER_RULES = (
-    # Party In the CIA (Parody of "Party In The U.S.A." by Miley Cyrus)
+    # Video extensions
     FilterRule(
-        source=re.compile(r"""\s\(Parody of ".*" by .*\)$"""),
+        source=re.compile(r"""\.(avi|wmv|mpg|mpeg|flv)$""", flags=re.IGNORECASE),
         count=1,
     ),
-    # White & Nerdy (Parody of "Ridin'" by Chamillionaire feat. Krayzie Bone)
+    # (Lyrics Video)
     FilterRule(
-        source=re.compile(r"""\s\(Parody of ".*" by .* feat\. .*\)$"""),
+        source=re.compile(r"""\(.*lyrics?\s*(video)?\)""", flags=re.IGNORECASE),
         count=1,
     ),
-    # The Saga Begins (Lyrical Adaption of "American Pie")
+    # ((Official)? (Track)? Stream)
     FilterRule(
-        source=re.compile(r"""\s\(Lyrical Adaption of ".*"\)$"""),
+        source=re.compile(r"""\((of+icial\s*)?(track\s*)?stream\)""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # ((Official)? (Music)? Video|Audio)
+    FilterRule(
+        source=re.compile(r"""\((of+icial\s*)?(music\s*)?(video|audio)\)""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # - (Official)? (Music)? Video|Audio
+    FilterRule(
+        source=re.compile(r"""-\s(of+icial\s*)?(music\s*)?(video|audio)$""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # ((Whatever)? Album Track)
+    FilterRule(
+        source=re.compile(r"""\(.*Album\sTrack\)""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # (Official)
+    FilterRule(
+        source=re.compile(r"""\(\s*of+icial\s*\)""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # (1999)
+    FilterRule(
+        source=re.compile(r"""\(\s*[0-9]{4}\s*\)""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # (HD) / (HQ)
+    FilterRule(
+        source=re.compile(r"""\(\s*(HD|HQ)\s*\)$"""),
+        count=1,
+    ),
+    # HD / HQ
+    FilterRule(
+        source=re.compile(r"""(HD|HQ)\s?$"""),
+        count=1,
+    ),
+    # Video Clip Officiel / Video Clip Official
+    FilterRule(
+        source=re.compile(r"""(vid[\u00E9e]o)?\s?clip\sof+ici[ae]l""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # Offizielles
+    FilterRule(
+        source=re.compile(r"""of+iziel+es\s*video""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # Video Clip
+    FilterRule(
+        source=re.compile(r"""vid[\u00E9e]o\s?clip""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # Clip
+    FilterRule(
+        source=re.compile(r"""\sclip""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # Full Album
+    FilterRule(
+        source=re.compile(r"""full\s*album""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # (Live)
+    FilterRule(
+        source=re.compile(r"""\(live.*?\)$""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # | Something
+    FilterRule(
+        source=re.compile(r"""\|.*$""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # Artist - The new "Track title" featuring someone
+    FilterRule(
+        source=re.compile(r"""^(|.*\s)"(.{5,})"(\s.*|)$"""),
+        target=r"""\2""",
+        count=1,
+    ),
+    # 'Track title'
+    FilterRule(
+        source=re.compile(r"""^(|.*\s)'(.{5,})'(\s.*|)$"""),
+        target=r"""\2""",
+        count=1,
+    ),
+    # (*01/01/1999*)
+    FilterRule(
+        source=re.compile(r"""\(.*[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{2,4}.*\)""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # Sub Español
+    FilterRule(
+        source=re.compile(r"""sub\s*español""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # (Letra)
+    FilterRule(
+        source=re.compile(r"""\s\(Letra\)""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # (En vivo)
+    FilterRule(
+        source=re.compile(r"""\s\(En\svivo\)""", flags=re.IGNORECASE),
+        count=1,
+    ),
+    # Sub Español
+    FilterRule(
+        source=re.compile(r"""sub\s*español""", flags=re.IGNORECASE),
         count=1,
     ),
 )
@@ -394,14 +399,15 @@ PARODY_FILTER_RULES = (
 
 __all__ = (
     "FilterRule",
-    "YOUTUBE_TRACK_FILTER_RULES",
-    "TRIM_SYMBOLS_FILTER_RULES",
-    "REMASTERED_FILTER_RULES",
-    "LIVE_FILTER_RULES",
     "CLEAN_EXPLICIT_FILTER_RULES",
     "FEATURE_FILTER_RULES",
+    "LIVE_FILTER_RULES",
     "NORMALIZE_FEATURE_FILTER_RULES",
-    "VERSION_FILTER_RULES",
-    "SUFFIX_FILTER_RULES",
     "PARODY_FILTER_RULES",
+    "REISSUE_FILTER_RULES",
+    "REMASTERED_FILTER_RULES",
+    "SUFFIX_FILTER_RULES",
+    "TRIM_SYMBOLS_FILTER_RULES",
+    "VERSION_FILTER_RULES",
+    "YOUTUBE_TRACK_FILTER_RULES",
 )
