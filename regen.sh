@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -euo pipefail
 
 UPSTREAM_VERSION="7ff7b4bf27ae12aec399a46994ce43a78a0fe333"
 

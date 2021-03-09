@@ -47,7 +47,7 @@ rule_multiline_finish = re.compile(r"^\s*\},$")
 rule_multiline_source = re.compile(r"^\s*source: /(.*)/([a-z]*),$")
 rule_multiline_target = re.compile(r"^\s*target: '(.*)',$")
 
-with open(input_filename, "r") as rulef:
+with open(input_filename, "r") as rules_file:
     statements = []
     ruleset_name = None
     line_counter = 0
@@ -57,7 +57,7 @@ with open(input_filename, "r") as rulef:
     multiline_flags = None
     multiline_target = None
 
-    for line in rulef:
+    for line in rules_file:
         line_counter += 1
 
         ruleset_start_match = ruleset_start.match(line)
