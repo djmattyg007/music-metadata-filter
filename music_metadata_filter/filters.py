@@ -48,7 +48,13 @@ def make_spotify_filter() -> MetadataFilter:
     return MetadataFilter(
         {
             "track": (remove_remastered, remove_parody, fix_track_suffix, remove_live),
-            "album": (remove_remastered, fix_track_suffix, remove_live, remove_reissue, remove_version),
+            "album": (
+                remove_remastered,
+                fix_track_suffix,
+                remove_live,
+                remove_reissue,
+                remove_version,
+            ),
         }
     )
 
