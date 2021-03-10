@@ -78,12 +78,12 @@ Then, construct a `MetadataFilter` using this filter set.
 ```python
 from music_metadata_filter.filter import MetadataFilter
 
-filter = MetadataFilter(filter_set)
-print(filter.filter_field("album", "Nevermind (Remastered)"))
+metadata_filter = MetadataFilter(filter_set)
+print(metadata_filter.filter_field("album", "Nevermind (Remastered)"))
 # outputs "Nevermind "
-print(filter.filter_field("track", "In Bloom - Nevermind Version"))
+print(metadata_filter.filter_field("track", "In Bloom - Nevermind Version"))
 # outputs "In Bloom (Nevermind Version)"
-print(filter.filter_field("track", "Won't Get Fooled Again - Album Version"))
+print(metadata_filter.filter_field("track", "Won't Get Fooled Again - Album Version"))
 # outputs "Won't Get Fooled Again "
 ```
 
@@ -95,7 +95,7 @@ the above filter set is actually the predefined Spotify filter:
 ```python
 from music_metadata_filter.filters import make_spotify_filter
 
-filter = make_spotify_filter()
+metadata_filter = make_spotify_filter()
 ```
 
 See [filters.py](music_metadata_filter/filters.py) for more details.
@@ -108,10 +108,10 @@ This is done by providing the `.extend()` method with another `MetadataFilter` o
 ```python
 from music_metadata_filter.filters import make_spotify_filter, make_amazon_filter
 
-filter = make_spotify_filter()
-filter.extend(make_amazon_filter())
+metadata_filter = make_spotify_filter()
+metadata_filter.extend(make_amazon_filter())
 
-print(filter.filter_field("track", "Seasons in the Abyss (Album Version)"))
+print(metadata_filter.filter_field("track", "Seasons in the Abyss (Album Version)"))
 # outputs "Seasons in the Abyss "
 ```
 
@@ -119,14 +119,14 @@ As an alternative, you can use the `.append()` method to apply a filter set to
 an existing `MetadataFilter` object.
 
 ```python
-filter = make_spotify_filter()
-filter.append({"album": lambda x: f"{x} Album"})
+metadata_filter = make_spotify_filter()
+metadata_filter.append({"album": lambda x: f"{x} Album"})
 ```
 
 Since these methods return a `MetadataFilter` instance, you can chain method calls.
 
 ```python
-filter = make_spotify_filter().append({
+metadata_filter = make_spotify_filter().append({
     "artist": lambda x: f"{x} The Artist",
 })
 ```
@@ -144,8 +144,10 @@ ruleset (like "Instrumental" and "Remix").
 
 ```python
 from music_metadata_filter.opinionated_filters import make_spotify_filter
-filter = make_spotify_filter()
-print(filter.filter_field("track", "Track Title - Live / Remastered"))
+
+metadata_filter = make_spotify_filter()
+
+print(metadata_filter.filter_field("track", "Track Title - Live / Remastered"))
 # outputs "Track Title (Live)"
 ```
 
