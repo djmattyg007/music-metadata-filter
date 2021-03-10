@@ -137,7 +137,7 @@ This project uses [invoke] as a task runner.
 
 ```sh
 # Initialise a virtualenv
-> python3 -m venv .
+> python3 -m venv venv --prompt music-metadata-filter
 > source bin/activate
 
 # Install dev dependencies
