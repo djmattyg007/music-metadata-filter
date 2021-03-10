@@ -29,11 +29,13 @@ jobs:
             ${{ runner.os }}-
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
-      - name: Lint with Black
-        run: black --check --diff --no-color music_metadata_filter tests setup.py
-      - name: Lint with flake8
-        run: flake8 music_metadata_filter tests
+      - name: Lint with black and flake8
+        run: inv lint
+      #- name: Lint with Black
+      #  run: black --check --diff --no-color music_metadata_filter tests setup.py
+      #- name: Lint with flake8
+      #  run: flake8 music_metadata_filter tests
       - name: Test with pytest
-        run: pytest
+        run: inv test
       - name: Check types with mypy
-        run: mypy music_metadata_filter tests
+        run: inv type-check
