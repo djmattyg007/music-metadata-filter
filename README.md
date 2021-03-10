@@ -18,9 +18,9 @@ pip install music-metadata-filter
 from music_metadata_filter.functions import remove_remastered
 
 print(remove_remastered("Track Title 1 - Remastered 2015"))
-# outputs "Track Title 1 "
+# outputs "Track Title 1"
 print(remove_remastered("Track Title 2 (2011 Remaster)"))
-# outputs "Track Title 2 "
+# outputs "Track Title 2"
 ```
 
 ### Single filter functions
@@ -36,9 +36,9 @@ combined fields ("Artist - Song", "Artist - Album"), as in the third example bel
 import music_metadata_filter.functions as functions
 
 print(functions.remove_remastered("Jane Doe (Remastered)"))
-# outputs "Jane Doe "
+# outputs "Jane Doe"
 print(functions.remove_version("Get Lucky (Album Version)"))
-# outputs "Get Lucky "
+# outputs "Get Lucky"
 print(functions.youtube("Car Bomb - Scattered Sprites (Official Music Video)"))
 # outputs "Car Bomb - Scattered Sprites"
 ```
@@ -79,12 +79,13 @@ Then, construct a `MetadataFilter` using this filter set.
 from music_metadata_filter.filter import MetadataFilter
 
 metadata_filter = MetadataFilter(filter_set)
+
 print(metadata_filter.filter_field("album", "Nevermind (Remastered)"))
-# outputs "Nevermind "
+# outputs "Nevermind"
 print(metadata_filter.filter_field("track", "In Bloom - Nevermind Version"))
 # outputs "In Bloom (Nevermind Version)"
 print(metadata_filter.filter_field("track", "Won't Get Fooled Again - Album Version"))
-# outputs "Won't Get Fooled Again "
+# outputs "Won't Get Fooled Again"
 ```
 
 ### Predefined filters
@@ -112,7 +113,7 @@ metadata_filter = make_spotify_filter()
 metadata_filter.extend(make_amazon_filter())
 
 print(metadata_filter.filter_field("track", "Seasons in the Abyss (Album Version)"))
-# outputs "Seasons in the Abyss "
+# outputs "Seasons in the Abyss"
 ```
 
 As an alternative, you can use the `.append()` method to apply a filter set to
