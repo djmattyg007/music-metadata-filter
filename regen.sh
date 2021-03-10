@@ -14,6 +14,10 @@ popd
 
 python3 scripts/rules_gen.py "upstream/src/rules.ts" > "music_metadata_filter/rules.py"
 
+rm -rf "tests/fixtures/filters"
+cp -r "upstream/test/fixtures/filters" "tests/fixtures/filters"
+python3 scripts/format_test_fixtures.py "tests/fixtures/filters"
+
 rm -rf "tests/fixtures/functions"
 cp -r "upstream/test/fixtures/functions" "tests/fixtures/functions"
 # We don't need to test this because we use the python stdlib for this functionality
