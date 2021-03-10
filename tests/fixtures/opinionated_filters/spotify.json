@@ -1,0 +1,14 @@
+[
+    {
+        "description": "should remove '/ Remastered' suffix",
+        "fieldName": "track",
+        "fieldValue": "Track Title - Live",
+        "expectedValue": "Track Title (Live)"
+    },
+    {
+        "description": "should remove '(/ Remastered)' suffix",
+        "fieldName": "track",
+        "fieldValue": "Track Title (Live)",
+        "expectedValue": "Track Title (Live)"
+    }
+]

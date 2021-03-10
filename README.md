@@ -131,6 +131,24 @@ filter = make_spotify_filter().append({
 })
 ```
 
+### Opinionated filters
+
+As discussed below, this library aims to be a direct port from another language. However, as is to
+be expected, I don't agree 100% with every choice made by the upstream maintainers. In order to
+make updates easier and ensure compatibility with upstream, my opinions are therefore separated out
+into a dedicated set of modules labelled with "opinionated".
+
+Right now, there isn't much that differs. The primary differences are that "Live" should not be
+stripped from Spotify metadata, and that "Live" suffixes should be normalised by the "fix suffix"
+ruleset (like "Instrumental" and "Remix").
+
+```python
+from music_metadata_filter.opinionated_filters import make_spotify_filter
+filter = make_spotify_filter()
+print(filter.filter_field("track", "Track Title - Live / Remastered"))
+# outputs "Track Title (Live)"
+```
+
 ## Development
 
 This project uses [invoke] as a task runner.
