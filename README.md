@@ -133,6 +133,8 @@ filter = make_spotify_filter().append({
 
 ## Development
 
+This project uses [invoke] as a task runner.
+
 ```sh
 # Initialise a virtualenv
 > python3 -m venv .
@@ -142,16 +144,16 @@ filter = make_spotify_filter().append({
 > pip install -r requirements-dev.txt
 
 # Run tests
-> pytest
+> inv test
 
 # Run black formatter
-> black music_metadata_filter tests setup.py
+> inv reformat
 
-# Run flake8 linter
-> flake8 music_metadata_filter tests
+# Run flake8 linter and black linter
+> inv lint
 
 # Run mypy type checker
-> mypy music_metadata_filter tests
+> inv type-check
 
 # Regenerate regular expressions and test fixtures from upstream
 > ./regen.sh
@@ -181,3 +183,4 @@ port to Python.
 
 [PyPI]: https://pypi.org/project/music-metadata-filter
 [workflow]: https://github.com/djmattyg007/music-metadata-filter/actions?query=workflow%3ATest
+[invoke]: https://github.com/pyinvoke/invoke
