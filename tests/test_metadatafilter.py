@@ -22,6 +22,9 @@ def test_canfilter():
     assert metadata_filter.can_filter_field("foo")
     assert not metadata_filter.can_filter_field("bar")
 
+    metadata_filter.filter_field("bar", "dummy")
+    assert not metadata_filter.can_filter_field("bar")
+
 
 def test_empty_getfields():
     metadata_filter = MetadataFilter({})

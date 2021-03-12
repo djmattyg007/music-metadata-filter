@@ -39,7 +39,7 @@ class MetadataFilter(object):
         return self
 
     def can_filter_field(self, field: str) -> bool:
-        return field in self._merged_filter_set
+        return len(self._merged_filter_set[field]) > 0
 
     def get_fields(self) -> IterableType[str]:
         return self._merged_filter_set.keys()
