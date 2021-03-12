@@ -6,4 +6,7 @@
 *.pyo
 *.egg-info
 
+/.coverage
+/htmlcov/
+
 /upstream/

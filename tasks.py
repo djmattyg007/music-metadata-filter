@@ -1,4 +1,5 @@
 from invoke import task
+import os
 
 
 @task
@@ -14,7 +15,11 @@ def lint(c):
 
 @task
 def test(c):
-    c.run("pytest")
+    args = ["pytest", "--cov=music_metadata_filter", "--cov-branch", "--cov-report=term"]
+    if os.environ.get("CI", "false") != "true":
+        args.append("--cov-report=html")
+
+    c.run(" ".join(args))
 
 
 @task
