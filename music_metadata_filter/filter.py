@@ -53,7 +53,7 @@ class MetadataFilter(object):
         if not text:
             return text
 
-        return reduce(lambda text, filter: filter(text), filters, text)
+        return reduce(lambda text, filter_func: filter_func(text), filters, text)
 
     def _append_filters(self, filter_set: FilterSet):
         for field, filters in filter_set.items():
