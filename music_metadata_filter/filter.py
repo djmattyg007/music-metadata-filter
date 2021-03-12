@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from collections import defaultdict
 from collections.abc import Iterable
 from functools import reduce
@@ -30,11 +32,11 @@ class MetadataFilter(object):
         self._merged_filter_set: MutableMapping[str, List[FilterFunction]] = defaultdict(lambda: [])
         self._append_filters(filter_set)
 
-    def append(self, filter_set: FilterSet) -> "MetadataFilter":
+    def append(self, filter_set: FilterSet) -> MetadataFilter:
         self._append_filters(filter_set)
         return self
 
-    def extend(self, filter: "MetadataFilter") -> "MetadataFilter":
+    def extend(self, filter: MetadataFilter) -> MetadataFilter:
         self._append_filters(filter._merged_filter_set)
         return self
 
