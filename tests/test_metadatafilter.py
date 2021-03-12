@@ -126,3 +126,8 @@ def test_filtering_empty_strings(input_str):
     should_not_be_called = Mock(side_effect=Exception("This function should not be called."))
     metadata_filter = MetadataFilter({"artist": should_not_be_called})
     assert metadata_filter.filter_field("artist", input_str) == input_str
+
+
+def test_invalid_filter_function():
+    with pytest.raises(TypeError, match="Invalid filter function: expected callable, got 'str'"):
+        MetadataFilter({"track": "not_callable"})
