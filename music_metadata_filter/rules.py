@@ -267,6 +267,16 @@ YOUTUBE_TRACK_FILTER_RULES = (
         source=re.compile(r"""\[[^\]]+\]"""),
         count=1,
     ),
+    # 【Whatever】
+    FilterRule(
+        source=re.compile(r"""【[^\]]+】"""),
+        count=1,
+    ),
+    # （Whatever）
+    FilterRule(
+        source=re.compile(r"""（[^\]]+）"""),
+        count=1,
+    ),
     # (Whatever Version)
     FilterRule(
         source=re.compile(r"""\([^)]*version\)$""", flags=re.IGNORECASE),

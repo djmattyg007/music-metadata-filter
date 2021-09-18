@@ -95,6 +95,16 @@
         "expectedValue": "Track Title"
     },
     {
+        "description": "should remove '\u3010whatever\u3011' string",
+        "funcParameter": "Track Title \u3010Official Video\u3011",
+        "expectedValue": "Track Title"
+    },
+    {
+        "description": "should remove '\uff08whatever\uff09' string",
+        "funcParameter": "Track Title \uff08Official Video\uff09",
+        "expectedValue": "Track Title"
+    },
+    {
         "description": "should remove '[whatever] + (whatever)' string",
         "funcParameter": "Track Title [Official Video] (Official Video)",
         "expectedValue": "Track Title"

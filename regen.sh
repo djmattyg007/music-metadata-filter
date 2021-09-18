@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-UPSTREAM_VERSION="7ff7b4bf27ae12aec399a46994ce43a78a0fe333"
+UPSTREAM_VERSION="079172b927237f98a570169762f2d005e8015fb2"
 
 cd "$(dirname -- "$(readlink -f "$0")")"
 
