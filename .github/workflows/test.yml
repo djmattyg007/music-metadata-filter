@@ -30,10 +30,12 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
       - name: Run linting
-        run: inv lint
+        run: python3 -m invoke lint
       - name: Test with pytest
-        run: inv test
+        run: python3 -m invoke test
       - name: Check types with mypy
-        run: inv type-check
+        run: python3 -m invoke type-check
+      - name: Test building package
+        run: python3 -m build
       - name: Run shellcheck
         uses: ludeeus/action-shellcheck@master
