@@ -62,6 +62,6 @@ class MetadataFilter(object):
             for filter_ in iterable_filters:
                 if not callable(filter_):
                     raise TypeError(
-                        f"Invalid filter function: expected callable, got '{type(filter).__name__}'"
+                        f"Invalid filter function: expected callable, got '{type(filter_).__name__}'"
                     )
             self._merged_filter_set[field].extend(iterable_filters)
