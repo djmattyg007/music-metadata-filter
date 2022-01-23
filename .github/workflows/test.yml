@@ -28,7 +28,9 @@ jobs:
             ${{ runner.os }}-pip-
             ${{ runner.os }}-
       - name: Install dependencies
-        run: pip install -r requirements-dev.txt
+        run: |
+          python3 -m pip install --upgrade pip setuptools wheel
+          python3 -m pip install -r requirements-dev.txt
       - name: Run linting
         run: python3 -m invoke lint
       - name: Test with pytest
