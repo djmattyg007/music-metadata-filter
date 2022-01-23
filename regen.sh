@@ -4,7 +4,7 @@ set -euo pipefail
 
 UPSTREAM_VERSION="079172b927237f98a570169762f2d005e8015fb2"
 
-cd "$(dirname -- "$(readlink -f "$0")")"
+cd "$(dirname "$(readlink -f "$0")")"
 
 git clone https://github.com/web-scrobbler/metadata-filter.git upstream
 

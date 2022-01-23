@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: ["3.8", "3.9", "3.10"]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -29,13 +29,11 @@ jobs:
             ${{ runner.os }}-
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
-      - name: Lint with black and flake8
+      - name: Run linting
         run: inv lint
-      #- name: Lint with Black
-      #  run: black --check --diff --no-color music_metadata_filter tests setup.py
-      #- name: Lint with flake8
-      #  run: flake8 music_metadata_filter tests
       - name: Test with pytest
         run: inv test
       - name: Check types with mypy
         run: inv type-check
+      - name: Run shellcheck
+        uses: ludeeus/action-shellcheck@v1
