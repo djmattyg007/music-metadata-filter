@@ -29,7 +29,7 @@ def test_canfilter():
 
 def test_empty_getfields():
     metadata_filter = MetadataFilter({})
-    assert tuple(sorted(metadata_filter.get_fields())) == tuple()
+    assert tuple(sorted(metadata_filter.get_fields())) == ()
 
 
 def test_getfields():

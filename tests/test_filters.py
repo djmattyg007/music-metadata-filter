@@ -1,5 +1,4 @@
 import json
-import sys
 from pathlib import Path
 from typing import Iterable, TypedDict
 
@@ -18,11 +17,12 @@ from music_metadata_filter.filters import (
 fixtures_path_base = Path(__file__).parent / "fixtures" / "filters"
 
 
+# https://github.com/PyCQA/pep8-naming/pull/189
 class FilterTestCase(TypedDict):
     description: str
-    fieldName: str
-    fieldValue: str
-    expectedValue: str
+    fieldName: str  # noqa: N815
+    fieldValue: str  # noqa: N815
+    expectedValue: str  # noqa: N815
 
 
 def load_fixtures(name: str) -> Iterable[FilterTestCase]:
