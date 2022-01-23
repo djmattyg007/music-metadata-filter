@@ -20,7 +20,7 @@ check_untyped_defs = true
 strict_equality = true
 warn_redundant_casts = true
 warn_unused_configs = true
-warn_unused_imports = true
+warn_unused_ignores = true
 
 [tool.pytest.ini_options]
 testpaths = "tests"

@@ -131,4 +131,4 @@ def test_filtering_empty_strings(input_str):
 
 def test_invalid_filter_function():
     with pytest.raises(TypeError, match="Invalid filter function: expected callable, got 'str'"):
-        MetadataFilter({"track": "not_callable"})
+        MetadataFilter({"track": "not_callable"})  # type: ignore
