@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="music-metadata-filter",
-    version="2.0.1",
+    version="3.0.0",
     author="Matthew Gamble",
     author_email="git@matthewgamble.net",
     description="A module for cleaning up artist, album, and song names.",
