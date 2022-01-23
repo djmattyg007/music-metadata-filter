@@ -36,8 +36,8 @@ class MetadataFilter(object):
         self._append_filters(filter_set)
         return self
 
-    def extend(self, filter: MetadataFilter) -> MetadataFilter:
-        self._append_filters(filter._merged_filter_set)
+    def extend(self, metadata_filter: MetadataFilter) -> MetadataFilter:
+        self._append_filters(metadata_filter._merged_filter_set)
         return self
 
     def can_filter_field(self, field: str) -> bool:
@@ -59,8 +59,8 @@ class MetadataFilter(object):
         for field, filters in filter_set.items():
             iterable_filters: FilterFunctions = make_iterable(filters)
 
-            for filter in iterable_filters:
-                if not callable(filter):
+            for filter_ in iterable_filters:
+                if not callable(filter_):
                     raise TypeError(
                         f"Invalid filter function: expected callable, got '{type(filter).__name__}'"
                     )
