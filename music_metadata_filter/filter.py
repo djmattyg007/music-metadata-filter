@@ -3,8 +3,8 @@ from __future__ import annotations
 from collections import defaultdict
 from collections.abc import Iterable
 from functools import reduce
-from typing import List, Mapping, MutableMapping, Union
 from typing import Iterable as IterableType
+from typing import List, Mapping, MutableMapping, Union
 
 from .functions import FilterFunction
 

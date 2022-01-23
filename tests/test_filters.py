@@ -1,21 +1,17 @@
 import json
-from pathlib import Path
-import pytest
 import sys
-from typing import Iterable
+from pathlib import Path
+from typing import Iterable, TypedDict
 
-if sys.version_info >= (3, 8):
-    from typing import TypedDict
-else:
-    from typing_extensions import TypedDict
+import pytest
 
 from music_metadata_filter.filter import MetadataFilter
 from music_metadata_filter.filters import (
-    make_youtube_filter,
+    make_amazon_filter,
     make_remastered_filter,
     make_spotify_filter,
-    make_amazon_filter,
     make_tidal_filter,
+    make_youtube_filter,
 )
 
 

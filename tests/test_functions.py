@@ -1,16 +1,12 @@
 import json
-from pathlib import Path
-import pytest
 import sys
-from typing import Iterable
+from pathlib import Path
+from typing import Iterable, TypedDict
 
-if sys.version_info >= (3, 8):
-    from typing import TypedDict
-else:
-    from typing_extensions import TypedDict
+import pytest
 
-from music_metadata_filter.functions import FilterFunction
 from music_metadata_filter.functions import (
+    FilterFunction,
     album_artist_from_artist,
     fix_track_suffix,
     normalize_feature,

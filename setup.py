@@ -14,7 +14,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/djmattyg007/music-metadata-filter",
     packages=setuptools.find_packages(include=("music_metadata_filter",)),
-    data_files=[('share/doc/python-music-metadata-filter', ['README.md', 'LICENSE.md'])],
+    data_files=[("share/doc/python-music-metadata-filter", ["README.md", "LICENSE.md"])],
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",

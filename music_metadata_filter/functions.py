@@ -1,8 +1,7 @@
-from functools import reduce
 import re
+from functools import reduce
 from typing import Callable, Iterable
 
-from .rules import FilterRule
 from .rules import (
     CLEAN_EXPLICIT_FILTER_RULES,
     FEATURE_FILTER_RULES,
@@ -15,6 +14,7 @@ from .rules import (
     TRIM_SYMBOLS_FILTER_RULES,
     VERSION_FILTER_RULES,
     YOUTUBE_TRACK_FILTER_RULES,
+    FilterRule,
 )
 
 

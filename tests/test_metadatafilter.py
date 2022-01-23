@@ -1,5 +1,6 @@
-import pytest
 from unittest.mock import Mock
+
+import pytest
 
 from music_metadata_filter.filter import MetadataFilter
 

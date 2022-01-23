@@ -167,10 +167,10 @@ This project uses [invoke] as a task runner.
 # Run tests
 > inv test
 
-# Run black formatter
+# Run black and isort formatters
 > inv reformat
 
-# Run flake8 linter and black linter
+# Run flake8 linter
 > inv lint
 
 # Run mypy type checker

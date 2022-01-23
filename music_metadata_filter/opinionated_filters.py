@@ -1,10 +1,5 @@
 from .filter import MetadataFilter
-from .functions import (
-    remove_parody,
-    remove_reissue,
-    remove_remastered,
-    remove_version,
-)
+from .functions import remove_parody, remove_reissue, remove_remastered, remove_version
 from .opinionated_functions import fix_track_suffix
 
 
