@@ -1,6 +1,6 @@
 The MIT License (MIT)
 Copyright © 2020-2021 Web Scrobbler Team
-Copyright © 2020-2021 Matthew Gamble
+Copyright © 2020-2022 Matthew Gamble
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the “Software”), to deal
