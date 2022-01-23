@@ -21,7 +21,6 @@ def reformat(c):
 @task
 def lint(c):
     c.run("flake8 --show-source --statistics music_metadata_filter tests", pty=pty)
-    c.run("check-manifest", pty=pty)
 
 
 @task
